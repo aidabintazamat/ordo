@@ -68,11 +68,11 @@ footer{padding:30px 0 90px;color:var(--mut);font-size:14px}
 
 T = {
  "ru": {"for_parents": "Родителям", "for_gardens": "Для детских садов", "login": "Войти", "home": "Главная",
-        "get_full": "Подключить Plus — 7 дней бесплатно", "trial": "7 дней бесплатно", "try": "Попробовать бесплатно", "demo": "💬 Демо в WhatsApp", "faq": "Частые вопросы",
+        "get_full": "Подключить Plus — 7 дней бесплатно", "trial": "7 дней бесплатно", "try": "Попробовать бесплатно", "try7": "Попробовать — 7 дней бесплатно", "demo": "💬 Демо в WhatsApp", "faq": "Частые вопросы",
         "other_cab": "Другие кабинеты", "materials": "Материалы кабинета", "open": "Открыто бесплатно",
         "locked": "Открыть — 7 дней бесплатно", "lock_hint": "Доступно в Plus", "proto": "Прототип структуры сайта для согласования. Тексты и материалы — демо."},
  "kk": {"for_parents": "Ата-аналарға", "for_gardens": "Балабақшаларға", "login": "Кіру", "home": "Басты бет",
-        "get_full": "Plus қосу — 7 күн тегін", "trial": "7 күн тегін", "try": "Тегін байқап көру", "demo": "💬 WhatsApp-та демо", "faq": "Жиі қойылатын сұрақтар",
+        "get_full": "Plus қосу — 7 күн тегін", "trial": "7 күн тегін", "try": "Тегін байқап көру", "try7": "7 күн тегін байқау", "demo": "💬 WhatsApp-та демо", "faq": "Жиі қойылатын сұрақтар",
         "other_cab": "Басқа кабинеттер", "materials": "Кабинет материалдары", "open": "Тегін ашық",
         "locked": "Ашу — 7 күн тегін", "lock_hint": "Plus-та қолжетімді", "proto": "Сайт құрылымының прототипі. Мәтіндер — демо."},
 }
@@ -139,9 +139,10 @@ CABS = [
   ["Учёт родительской оплаты", "Напоминания о долгах", "Отчёты по группам и садам", "Касса и выгрузки"],
   [("roditelskaya-oplata", "Родительская оплата", "учёт оплат детского сада", "list")]),
  ("prodazhi", "Кабинет продаж", "Сату кабинеті", "🎯", "#FDE8E4",
-  "Для менеджера по набору детей: CRM для детского сада — заявки, экскурсии, пробный день, договор.",
-  ["Заявки из сайта, WhatsApp и Instagram в одной воронке", "Запись на экскурсию и пробный день", "Свободные места по возрасту", "Договор и оплата онлайн"],
-  [("crm-dlya-detskogo-sada", "CRM для детского сада", "программа для набора детей", "list")]),
+  "Бесплатно для каждого сада: CRM для набора детей — заявки, экскурсии, пробный день, договор, и карточка сада в реестре ORDO, где родители ищут сады.",
+  ["Бесплатно — без Plus и без срока", "Карточка сада в реестре ORDO: родители находят вас по городу и району", "Заявки из сайта, WhatsApp и Instagram в одной воронке", "Запись на экскурсию и пробный день", "Свободные места по возрасту", "Договор и оплата онлайн"],
+  [("crm-dlya-detskogo-sada", "CRM для детского сада", "бесплатная программа для набора детей", "free"),
+   ("reestr-detskih-sadov", "Реестр детских садов ORDO", "бесплатная карточка сада, заявки родителей", "free")]),
 ]
 SHORT = {"metodist": ("Методический", "Әдістемелік"), "hr": ("HR", "HR"), "povar": ("Повар", "Аспаз"), "medik": ("Медик", "Медбике"), "finansy": ("Финансы", "Қаржы"), "prodazhi": ("Продажи", "Сату")}
 CAB_KK_LEAD = {"metodist": "Әдіскер мен тәрбиешілерге: ҚР Үлгілік оқу бағдарламасы бойынша дайын циклограммалар, ұйымдастырылған іс-әрекет, картотекалар, сценарийлер — орыс және қазақ тілдерінде."}
@@ -182,6 +183,11 @@ def page(path, lang, title, desc, body, crumbs, alt=None, schema=None):
     out.write_text(doc, encoding="utf-8")
     return out
 
+FREE = {"prodazhi"}   # Аида TG 8113: реестр и кабинет продаж — бесплатно
+def free_badge(slug, lang):
+    return ('<span class="badge">' + ("Бесплатно" if lang == "ru" else "Тегін") + "</span>") if slug in FREE else ""
+def free_block(lang="ru"):
+    return f'<section><div class="wrap"><div class="plus" style="background:linear-gradient(135deg,#8CB43C,#5C8A24)"><div><h2 style="margin:0">Бесплатно — навсегда</h2><p style="color:#EAF4D8">Кабинет продаж и карточка сада в реестре ORDO не требуют Plus. Зарегистрируйте сад — и получайте заявки родителей.</p></div><a class="btn" style="color:#5C8A24" href="{REG}">Подключить бесплатно</a></div></div></section>'
 def plus_block(lang="ru", what="материалы"):
     t = T[lang]
     if lang == "kk":
@@ -245,9 +251,9 @@ for lang in ("ru", "kk"):
         desc = "Балабақшаға арналған бағдарлама: әдістемелік кабинет, HR, аспаз, медбике, қаржы және сату бір жүйеде. Дайын циклограмма, табель, мәзір. 7 күн тегін."
         h1 = 'Бүкіл балабақша <em>бір жүйеде</em>'
         lead = "Бүкіл ұжымға арналған 6 кабинет: әдістеме, HR, ас үй, медицина, қаржы және сату."
-    cards = "".join(f'<a class="card" href="{u("cabinets", c[0], lang=lang)}"><div class="ic" style="background:{c[4]}">{c[3]}</div><h3>{c[1] if lang=="ru" else c[2]}</h3><p>{c[5] if lang=="ru" else CAB_KK_LEAD.get(c[0], c[5])}</p></a>' for c in CABS)
+    cards = "".join(f'<a class="card" href="{u("cabinets", c[0], lang=lang)}"><div class="ic" style="background:{c[4]}">{c[3]}</div><h3>{c[1] if lang=="ru" else c[2]} {free_badge(c[0], lang)}</h3><p>{c[5] if lang=="ru" else CAB_KK_LEAD.get(c[0], c[5])}</p></a>' for c in CABS)
     body = f"""<div class="hero"><div class="wrap"><h1>{h1}</h1><p class="lead">{lead}</p>
-<div class="acts"><a class="btn g" href="{REG}">{T[lang]['try']} — {T[lang]['trial']}</a><a class="btn ghost" href="{WA('ORDO')}">{T[lang]['demo']}</a></div></div></div>
+<div class="acts"><a class="btn g" href="{REG}">{T[lang]['try7']}</a><a class="btn ghost" href="{WA('ORDO')}">{T[lang]['demo']}</a></div></div></div>
 <section style="padding-top:0"><div class="wrap">{orbit_html(lang)}</div></section>
 <section><div class="wrap"><h2>{'Кабинеты' if lang=='ru' else 'Кабинеттер'}</h2><div class="grid g3">{cards}</div></div></section>"""
     qas = [("Что такое программа для детского сада ORDO?", "Онлайн-система с 6 кабинетами: методический (методист и воспитатели), HR (заведующая, директор, администратор, помощник воспитателя), повар, медик, финансы и продажи."),
@@ -269,12 +275,12 @@ for c in CABS:
     fl = "".join(f'<div class="card"><h3>✓ {html.escape(f)}</h3></div>' for f in feats)
     ml = "".join(f'<a class="card" href="{u("cabinets", slug, m[0])}"><h3>{m[1]}</h3><p>{m[2]}</p></a>' for m in mats)
     body = f"""<div class="hero"><div class="wrap"><div class="ic" style="background:{col}">{emo}</div><h1>{name} <em>ORDO</em></h1><p class="lead">{lead}</p>
-<div class="acts"><a class="btn g" href="{REG}">{T['ru']['try']} — {T['ru']['trial']}</a><a class="btn ghost" href="{WA('ORDO')}">{T['ru']['demo']}</a></div></div></div>
+<div class="acts"><a class="btn g" href="{REG}">{'Подключить бесплатно' if slug in FREE else T['ru']['try7']}</a><a class="btn ghost" href="{WA('ORDO')}">{T['ru']['demo']}</a></div></div></div>
 {cyclo_embed("ru") if slug == "metodist" else ""}
 <section><div class="wrap"><h2>Что делает кабинет</h2><div class="grid g3">{fl}</div></div></section>
 <section><div class="wrap"><h2>{T['ru']['materials']}</h2><div class="grid g3">{ml}</div></div></section>"""
-    fb, fs = faq_block([(f"Для кого {name.lower()}?", lead), ("Можно попробовать бесплатно?", "Да, 7 дней бесплатно; часть материалов открыта без регистрации.")])
-    body += plus_block() + fb + other_cabs(slug)
+    fb, fs = faq_block([(f"Для кого {name.lower()}?", lead), ("Сколько стоит?", "Бесплатно: кабинет продаж и карточка в реестре ORDO не требуют Plus.") if slug in FREE else ("Можно попробовать бесплатно?", "Да, 7 дней бесплатно; часть материалов открыта без регистрации.")])
+    body += (free_block() if slug in FREE else plus_block()) + fb + other_cabs(slug)
     alt = {"ru-KZ": u("cabinets", slug)}
     if slug == "metodist": alt["kk-KZ"] = u("cabinets", slug, lang="kk")
     crumbs = [(T["ru"]["home"], BASE + "/"), (T["ru"]["for_gardens"], u("cabinets")), (name, u("cabinets", slug))]
@@ -286,6 +292,16 @@ for c in CABS:
         mcrumbs = crumbs + [(mtitle, u("cabinets", slug, mslug))]
         if kind == "age":
             continue  # циклограмма — ниже отдельно
+        if kind == "free":
+            feats_free = {"crm-dlya-detskogo-sada": ["Воронка заявок: новая → экскурсия → пробный день → договор", "Заявки из сайта, WhatsApp и Instagram в одном месте", "Свободные места по возрасту", "Напоминания менеджеру о звонке"],
+                          "reestr-detskih-sadov": ["Карточка сада: фото, цены, возраст, адрес на карте", "Родители находят сад по городу и району", "Заявка на экскурсию и пробный день приходит в CRM", "Сайт сада на ORDO"]}[mslug]
+            body = f"""<div class="hero"><div class="wrap"><h1>{mtitle} <em>— бесплатно</em></h1><p class="lead">{mdesc.capitalize()}. Без Plus и без срока — зарегистрируйте сад.</p>
+<div class="acts"><a class="btn g" href="{REG}">Подключить бесплатно</a><a class="btn ghost" href="{WA(mtitle)}">{T['ru']['demo']}</a></div></div></div>
+<section style="padding-top:0"><div class="wrap"><div class="grid g2">{''.join(f'<div class="card"><h3>✓ {html.escape(x)}</h3></div>' for x in feats_free)}</div></div></section>"""
+            fb, fs = faq_block([(f"{mtitle} правда бесплатно?", "Да. Кабинет продаж и карточка в реестре ORDO бесплатны для каждого сада."), ("Как подключить?", "Зарегистрируйте сад на kz.ordo.education — доступ сразу.")])
+            body += free_block() + fb + other_cabs(slug)
+            pages.append(page(f"kz/cabinets/{slug}/{mslug}", "ru", f"{mtitle} — бесплатно | ORDO", f"{mtitle}: {mdesc}. Бесплатно для каждого детского сада.", body, mcrumbs, {"ru-KZ": u("cabinets", slug, mslug)}, [fs]))
+            continue
         items = [f"{mtitle}: материал {i}" for i in range(1, 7)]
         lst = f'<div class="day"><h3>{items[0]} <span class="badge">{T["ru"]["open"]}</span></h3><p>Демо-фрагмент открытого материала: текст виден на странице и доступен для поиска.</p><p style="margin-top:10px"><button class="btn ghost noprint" onclick="window.print()">🖨 Распечатать / сохранить PDF</button></p></div>'
         lst += "".join(f'<div class="day lock"><div class="lockrow"><h3 style="margin:0">🔒 {x}</h3><span><small>{T["ru"]["lock_hint"]}</small> <a class="btn ghost" href="{REG}">{T["ru"]["locked"]}</a></span></div></div>' for x in items[1:])
@@ -293,7 +309,7 @@ for c in CABS:
 <section style="padding-top:0"><div class="wrap">{lst}</div></section>"""
         fb, fs = faq_block([(f"Где скачать {mtitle.lower()}?", "Один материал открыт бесплатно на этой странице, все остальные — в кабинете ORDO с Садик Plus."),
                             ("Есть на казахском?", "Да, материалы на русском и казахском.")])
-        body += plus_block() + fb + other_cabs(slug)
+        body += (free_block() if slug in FREE else plus_block()) + fb + other_cabs(slug)
         pages.append(page(f"kz/cabinets/{slug}/{mslug}", "ru", f"{mtitle} для детского сада — {mdesc} | ORDO",
                           f"{mtitle} для детского сада: {mdesc}. Образец открыт бесплатно, все материалы — в {name.lower()} ORDO.", body, mcrumbs,
                           {"ru-KZ": u("cabinets", slug, mslug)}, [fs]))
@@ -302,7 +318,7 @@ for c in CABS:
 c = CABS[0]
 ml = "".join(f'<a class="card" href="{u("cabinets", "metodist", m[0], lang="kk") if m[0]=="cyclogram" else u("cabinets","metodist",m[0])}"><h3>{m[1]}</h3><p>{m[2]}</p></a>' for m in c[7])
 body = f"""<div class="hero"><div class="wrap"><div class="ic" style="background:{c[4]}">{c[3]}</div><h1>{c[2]} <em>ORDO</em></h1><p class="lead">{CAB_KK_LEAD['metodist']}</p>
-<div class="acts"><a class="btn g" href="{REG}">{T['kk']['try']} — {T['kk']['trial']}</a><a class="btn ghost" href="{WA('ORDO')}">{T['kk']['demo']}</a></div></div></div>
+<div class="acts"><a class="btn g" href="{REG}">{T['kk']['try7']}</a><a class="btn ghost" href="{WA('ORDO')}">{T['kk']['demo']}</a></div></div></div>
 {cyclo_embed("kk")}
 <section><div class="wrap"><h2>{T['kk']['materials']}</h2><div class="grid g3">{ml}</div></div></section>""" + plus_block("kk") + other_cabs("metodist", "kk")
 pages.append(page("kz/kk/cabinets/metodist", "kk", "Балабақшаның әдістемелік кабинеті онлайн — ORDO", CAB_KK_LEAD["metodist"], body,
