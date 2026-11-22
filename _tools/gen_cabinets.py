@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://aidabintazamat.github.io/ordo"
 PLUS = "21 900 ₸/мес"
-PAY = {"ru": "Оплата через Kaspi или картой, без договора на год.", "kk": "Kaspi немесе карта арқылы төлем, жылдық келісімшартсыз."}
+PAY = {"ru": "Оплата через Kaspi или картой.", "kk": "Kaspi немесе карта арқылы төлем."}
 REG = "https://kz.ordo.education/#register-business"     # бесплатная регистрация сада (Free → 7 дней Plus)
 LOGIN = "https://kz.ordo.education/"
 from urllib.parse import quote
@@ -343,7 +343,7 @@ GEN_RU = ["сен", "окт", "ноя", "дек", "янв", "фев", "мар", 
 def year_calendar(lang):
     """Календарь учебного года 2026–2027: недели по месяцам. Открыта 1-я неделя сентября, остальные — Plus."""
     t = T[lang]; names = MONTHS_RU if lang == "ru" else MONTHS_KK
-    d = _dt.date(2026, 8, 31); end = _dt.date(2027, 5, 31); months = {}
+    d = _dt.date(2026, 8, 31); end = _dt.date(2027, 5, 24); months = {}
     n = 0
     while d <= end:
         fri = d + _dt.timedelta(days=4); key = (max(d, _dt.date(2026, 9, 1))).month
