@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://aidabintazamat.github.io/ordo"
 PLUS = "21 900 ₸/мес"
+PAY = {"ru": "Оплата через Kaspi или картой, без договора на год.", "kk": "Kaspi немесе карта арқылы төлем, жылдық келісімшартсыз."}
 REG = "https://kz.ordo.education/#register-business"     # бесплатная регистрация сада (Free → 7 дней Plus)
 LOGIN = "https://kz.ordo.education/"
 from urllib.parse import quote
@@ -48,8 +49,13 @@ details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:
 footer{padding:30px 0 90px;color:var(--mut);font-size:14px}
 .hero .acts{display:flex;gap:10px;flex-wrap:wrap}.lockrow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 .lockrow small{color:var(--mut)}.mbar{display:none}
+.plus .pay{font-size:14px;color:#fff;opacity:.92}.btn.wa{background:#25D366;color:#fff}
+.cal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.cal .m{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px}
+.cal .m h3{font-size:15px;margin:0 0 8px}.cal .w{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:6px 10px;border-radius:10px;margin-bottom:4px;background:#F6F8FA;color:var(--mut)}
+.cal .w.open{background:var(--gl);color:var(--g2);font-weight:700}.cal .w:hover{outline:1px solid var(--t)}
+@media(max-width:820px){.cal{grid-template-columns:1fr 1fr}}@media(max-width:480px){.cal{grid-template-columns:1fr}}
 @media(max-width:820px){.mbar{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;padding:10px 12px;background:#fff;border-top:1px solid var(--line);z-index:9}.mbar .btn{flex:1;justify-content:center;padding:12px 10px}.hdr-try{display:none}}
-@media print{header,footer,.crumbs,.hero,.plus,details,section h2,.chips,.lock,.mbar,.noprint,.orbit{display:none!important}body{background:#fff}.day{border:0;box-shadow:none}}
+@media print{header,footer,.crumbs,.hero,.plus,details,section h2,.chips,.lock,.mbar,.noprint,.orbit,.cal{display:none!important}body{background:#fff}.day{border:0;box-shadow:none}}
 /* орбита */
 .orbit{position:relative;max-width:760px;aspect-ratio:1/1;margin:0 auto}
 .orbit svg{position:absolute;inset:0;width:100%;height:100%}
@@ -183,6 +189,10 @@ def page(path, lang, title, desc, body, crumbs, alt=None, schema=None):
     out.write_text(doc, encoding="utf-8")
     return out
 
+def share_wa(text, url, lang):
+    lab = "Отправить в WhatsApp" if lang == "ru" else "WhatsApp-қа жіберу"
+    return f'<a class="btn wa noprint" target="_blank" rel="noopener" href="https://wa.me/?text={quote(text + " " + url)}">📲 {lab}</a>'
+
 FREE = {"prodazhi"}   # Аида TG 8113: реестр и кабинет продаж — бесплатно
 def free_badge(slug, lang):
     return ('<span class="badge">' + ("Бесплатно" if lang == "ru" else "Тегін") + "</span>") if slug in FREE else ""
@@ -191,8 +201,8 @@ def free_block(lang="ru"):
 def plus_block(lang="ru", what="материалы"):
     t = T[lang]
     if lang == "kk":
-        return f'<section><div class="wrap"><div class="plus"><div><h2 style="margin:0">Садик Plus — {PLUS}</h2><p>Барлық материалдар толық, жүктеу және басып шығару. {t["trial"]}.</p></div><a class="btn" href="{REG}">{t["get_full"]}</a></div></div></section>'
-    return f'<section><div class="wrap"><div class="plus"><div><h2 style="margin:0">Садик Plus — {PLUS}</h2><p>Все {what} полностью, скачивание и печать. {t["trial"]}.</p></div><a class="btn" href="{REG}">{t["get_full"]}</a></div></div></section>'
+        return f'<section><div class="wrap"><div class="plus"><div><h2 style="margin:0">Садик Plus — {PLUS}</h2><p>Барлық материалдар толық, жүктеу және басып шығару. {t["trial"]}.</p><p class="pay">💳 {PAY["kk"]}</p></div><a class="btn" href="{REG}">{t["get_full"]}</a></div></div></section>'
+    return f'<section><div class="wrap"><div class="plus"><div><h2 style="margin:0">Садик Plus — {PLUS}</h2><p>Все {what} полностью, скачивание и печать. {t["trial"]}.</p><p class="pay">💳 {PAY["ru"]}</p></div><a class="btn" href="{REG}">{t["get_full"]}</a></div></div></section>'
 
 def faq_block(qas, lang="ru"):
     sch = {"@context": "https://schema.org", "@type": "FAQPage",
@@ -303,7 +313,7 @@ for c in CABS:
             pages.append(page(f"kz/cabinets/{slug}/{mslug}", "ru", f"{mtitle} — бесплатно | ORDO", f"{mtitle}: {mdesc}. Бесплатно для каждого детского сада.", body, mcrumbs, {"ru-KZ": u("cabinets", slug, mslug)}, [fs]))
             continue
         items = [f"{mtitle}: материал {i}" for i in range(1, 7)]
-        lst = f'<div class="day"><h3>{items[0]} <span class="badge">{T["ru"]["open"]}</span></h3><p>Демо-фрагмент открытого материала: текст виден на странице и доступен для поиска.</p><p style="margin-top:10px"><button class="btn ghost noprint" onclick="window.print()">🖨 Распечатать / сохранить PDF</button></p></div>'
+        lst = f'<div class="day"><h3>{items[0]} <span class="badge">{T["ru"]["open"]}</span></h3><p>Демо-фрагмент открытого материала: текст виден на странице и доступен для поиска.</p><p style="margin-top:10px"><button class="btn ghost noprint" onclick="window.print()">🖨 Распечатать / сохранить PDF</button> ' + share_wa(f"{mtitle} — образец ORDO", u("cabinets", slug, mslug), "ru") + '</p></div>'
         lst += "".join(f'<div class="day lock"><div class="lockrow"><h3 style="margin:0">🔒 {x}</h3><span><small>{T["ru"]["lock_hint"]}</small> <a class="btn ghost" href="{REG}">{T["ru"]["locked"]}</a></span></div></div>' for x in items[1:])
         body = f"""<div class="hero"><div class="wrap"><h1>{mtitle} <em>для детского сада</em></h1><p class="lead">{mdesc.capitalize()}. Готовые материалы ORDO по стандартам РК, на русском и казахском.</p></div></div>
 <section style="padding-top:0"><div class="wrap">{lst}</div></section>"""
@@ -326,12 +336,43 @@ pages.append(page("kz/kk/cabinets/metodist", "kk", "Балабақшаның ә�
                   {"ru-KZ": u("cabinets", "metodist"), "kk-KZ": u("cabinets", "metodist", lang="kk")}))
 
 # ---------- циклограмма: хаб + 5 групп, RU и KK
-def cyclo_week(lang):
+import datetime as _dt
+MONTHS_RU = ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь", "Февраль", "Март", "Апрель", "Май"]
+MONTHS_KK = ["Қыркүйек", "Қазан", "Қараша", "Желтоқсан", "Қаңтар", "Ақпан", "Наурыз", "Сәуір", "Мамыр"]
+GEN_RU = ["сен", "окт", "ноя", "дек", "янв", "фев", "мар", "апр", "мая"]
+def year_calendar(lang):
+    """Календарь учебного года 2026–2027: недели по месяцам. Открыта 1-я неделя сентября, остальные — Plus."""
+    t = T[lang]; names = MONTHS_RU if lang == "ru" else MONTHS_KK
+    d = _dt.date(2026, 8, 31); end = _dt.date(2027, 5, 31); months = {}
+    n = 0
+    while d <= end:
+        fri = d + _dt.timedelta(days=4); key = (max(d, _dt.date(2026, 9, 1))).month
+        n += 1
+        lab = f"{max(d, _dt.date(2026,9,1)).day}–{fri.day}.{fri.month:02d}"
+        months.setdefault(key, []).append((n, lab))
+        d += _dt.timedelta(days=7)
+    order = [9, 10, 11, 12, 1, 2, 3, 4, 5]; html_m = ""
+    wk = "нед." if lang == "ru" else "апта"
+    for i, mo in enumerate(order):
+        rows = ""
+        for n, lab in months.get(mo, []):
+            if n == 1:
+                rows += f'<a class="w open" href="#week1"><span>{n} {wk} · {lab}</span><span>{t["open"]}</span></a>'
+            else:
+                rows += f'<a class="w" href="{REG}"><span>{n} {wk} · {lab}</span><span>🔒</span></a>'
+        html_m += f'<div class="m"><h3>{names[i]}</h3>{rows}</div>'
+    h2 = "Календарь недель на 2026–2027" if lang == "ru" else "2026–2027 апталар күнтізбесі"
+    sub = (f"{n} недель учебного года. Первая неделя открыта, остальные — в методическом кабинете с Plus." if lang == "ru"
+           else f"Оқу жылының {n} аптасы. Бірінші апта ашық, қалғаны — Plus-та.")
+    return f'<section><div class="wrap"><h2>{h2}</h2><p class="lead" style="font-size:15px">{sub}</p><div class="cal">{html_m}</div></div></section>'
+
+def cyclo_week(lang, url="", label=""):
     days = DAYS_RU if lang == "ru" else DAYS_KK
     mon = MON_RU if lang == "ru" else MON_KK
     t = T[lang]
-    h = f'<div class="day"><h3>{days[0]} <span class="badge">{t["open"]}</span></h3><ol>' + "".join(f"<li>{html.escape(x)}</li>" for x in mon) + \
-        f'</ol><p style="margin-top:10px"><button class="btn ghost noprint" onclick="window.print()">🖨 {"Распечатать / сохранить PDF" if lang=="ru" else "Басып шығару / PDF"}</button></p></div>'
+    wa = share_wa(label or ("Циклограмма ORDO" if lang == "ru" else "ORDO циклограммасы"), url or u("cabinets", "metodist", "cyclogram", lang=lang), lang)
+    h = f'<div class="day" id="week1"><h3>{days[0]} <span class="badge">{t["open"]}</span></h3><ol>' + "".join(f"<li>{html.escape(x)}</li>" for x in mon) + \
+        f'</ol><p style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost noprint" onclick="window.print()">🖨 {"Распечатать / сохранить PDF" if lang=="ru" else "Басып шығару / PDF"}</button>{wa}</p></div>'
     h += "".join(f'<div class="day lock"><div class="lockrow"><h3 style="margin:0">🔒 {d}</h3><span><small>{t["lock_hint"]}</small> <a class="btn ghost" href="{REG}">{t["locked"]}</a></span></div></div>' for d in days[1:])
     return h
 
@@ -381,7 +422,7 @@ for lang in ("ru", "kk"):
             lead = "Апта: режим сәттері, ұйымдастырылған іс-әрекет, серуен, ата-аналармен жұмыс."
         fb, fs = faq_block(qas[:2], lang)
         body = f"""<div class="hero"><div class="wrap"><h1>{h1}</h1><p class="lead">{lead}</p>{chips_all(a[0])}</div></div>
-<section style="padding-top:0"><div class="wrap">{cyclo_week(lang)}</div></section>""" + plus_block(lang, "дни недели и вся программа года") + fb
+<section style="padding-top:0"><div class="wrap">{cyclo_week(lang, u("cabinets","metodist","cyclogram",a[0],lang=lang), title.split(" | ")[0] + (" — понедельник" if lang=="ru" else " — дүйсенбі"))}</div></section>""" + year_calendar(lang) + plus_block(lang, "дни недели и вся программа года") + fb
         alt = {"ru-KZ": u("cabinets", "metodist", "cyclogram", a[0]), "kk-KZ": u("cabinets", "metodist", "cyclogram", a[0], lang="kk")}
         pages.append(page(f"{base_path}/{a[0]}", lang, title, desc, body, crumbs + [(NOM[a[0]][0 if lang=="ru" else 1], alt["ru-KZ" if lang=="ru" else "kk-KZ"])], alt, [fs]))
 
