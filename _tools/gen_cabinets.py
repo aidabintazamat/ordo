@@ -75,6 +75,7 @@ AGES = [("rannii", "группы раннего возраста (1–2 года
         ("starshaya", "старшей группы (4–5 лет)", "ересек топ (4–5 жас)"),
         ("predshkolnaya", "предшкольной группы (5–6 лет)", "мектепалды даярлық тобы (5–6 жас)")]
 
+NOM = {"rannii": ("Ранняя группа", "Ерте жас тобы"), "mladshaya": ("Младшая группа", "Кіші топ"), "srednyaya": ("Средняя группа", "Ортаңғы топ"), "starshaya": ("Старшая группа", "Ересек топ"), "predshkolnaya": ("Предшкольная группа", "Мектепалды даярлық")}
 DAYS_RU = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница"]
 DAYS_KK = ["Дүйсенбі", "Сейсенбі", "Сәрсенбі", "Бейсенбі", "Жұма"]
 MON_RU = ["Утренний приём детей, беседа «Как я провёл выходные»", "Утренняя гимнастика (комплекс №1)",
@@ -205,6 +206,21 @@ def orbit_html(lang="ru"):
 {''.join(rays)}{''.join(dots)}</svg>
 <div class="core"><img src="{BASE}/assets/ordo-o.png" alt="ORDO"></div>{''.join(nodes)}</div>"""
 
+def cyclo_embed(lang):
+    """Блок «Циклограмма» прямо на главной странице методического кабинета (Аида TG 8106)."""
+    t = T[lang]; days = DAYS_RU if lang == "ru" else DAYS_KK; mon = MON_RU if lang == "ru" else MON_KK
+    chips = '<div class="chips">' + "".join(
+        f'<a class="{"on" if a[0]=="srednyaya" else ""}" href="{u("cabinets","metodist","cyclogram",a[0],lang=lang)}">{NOM[a[0]][0 if lang=="ru" else 1]}</a>' for a in AGES) + "</div>"
+    week = f'<div class="day"><h3>{days[0]} <span class="badge">{t["open"]}</span></h3><ol>' + "".join(f"<li>{html.escape(x)}</li>" for x in mon) + "</ol></div>"
+    week += "".join(f'<div class="day lock"><h3>{d} <span>🔒</span></h3><a class="btn ghost" href="#">{t["locked"]}</a></div>' for d in days[1:])
+    if lang == "ru":
+        h = "Циклограмма на 2026–2027 — выберите группу"; sub = "Пример: средняя группа (3–4 года). Понедельник открыт, остальные дни — в кабинете с Plus. Воспитатель видит только свою группу."
+        more = "Все циклограммы по группам →"
+    else:
+        h = "Циклограмма 2026–2027 — топты таңдаңыз"; sub = "Мысал: ортаңғы топ (3–4 жас). Дүйсенбі ашық, қалғаны — Plus."
+        more = "Барлық топтардың циклограммасы →"
+    return f'<section style="padding-top:0"><div class="wrap"><h2>🗓 {h}</h2><p class="lead" style="font-size:16px">{sub}</p>{chips}{week}<a class="btn" href="{u("cabinets","metodist","cyclogram",lang=lang)}">{more}</a></div></section>'
+
 pages = []
 
 # ---------- хаб «Для детских садов»
@@ -245,6 +261,7 @@ for c in CABS:
     ml = "".join(f'<a class="card" href="{u("cabinets", slug, m[0])}"><h3>{m[1]}</h3><p>{m[2]}</p></a>' for m in mats)
     body = f"""<div class="hero"><div class="wrap"><div class="ic" style="background:{col}">{emo}</div><h1>{name} <em>ORDO</em></h1><p class="lead">{lead}</p>
 <a class="btn g" href="#">{T['ru']['trial']}</a></div></div>
+{cyclo_embed("ru") if slug == "metodist" else ""}
 <section><div class="wrap"><h2>Что делает кабинет</h2><div class="grid g3">{fl}</div></div></section>
 <section><div class="wrap"><h2>{T['ru']['materials']}</h2><div class="grid g3">{ml}</div></div></section>"""
     fb, fs = faq_block([(f"Для кого {name.lower()}?", lead), ("Можно попробовать бесплатно?", "Да, 7 дней бесплатно; часть материалов открыта без регистрации.")])
@@ -277,6 +294,7 @@ c = CABS[0]
 ml = "".join(f'<a class="card" href="{u("cabinets", "metodist", m[0], lang="kk") if m[0]=="cyclogram" else u("cabinets","metodist",m[0])}"><h3>{m[1]}</h3><p>{m[2]}</p></a>' for m in c[7])
 body = f"""<div class="hero"><div class="wrap"><div class="ic" style="background:{c[4]}">{c[3]}</div><h1>{c[2]} <em>ORDO</em></h1><p class="lead">{CAB_KK_LEAD['metodist']}</p>
 <a class="btn g" href="#">{T['kk']['trial']}</a></div></div>
+{cyclo_embed("kk")}
 <section><div class="wrap"><h2>{T['kk']['materials']}</h2><div class="grid g3">{ml}</div></div></section>""" + plus_block("kk") + other_cabs("metodist", "kk")
 pages.append(page("kz/kk/cabinets/metodist", "kk", "Балабақшаның әдістемелік кабинеті онлайн — ORDO", CAB_KK_LEAD["metodist"], body,
                   [(T["kk"]["home"], BASE + "/"), (T["kk"]["for_gardens"], u("cabinets", lang="kk")), (c[2], u("cabinets", "metodist", lang="kk"))],
@@ -295,7 +313,7 @@ def cyclo_week(lang):
 for lang in ("ru", "kk"):
     t = T[lang]
     chips_all = lambda cur: '<div class="chips">' + "".join(
-        f'<a class="{"on" if a[0]==cur else ""}" href="{u("cabinets","metodist","cyclogram",a[0],lang=lang)}">{(a[1] if lang=="ru" else a[2]).split(" (")[0].replace("группы ","").replace("группы","")}</a>' for a in AGES) + "</div>"
+        f'<a class="{"on" if a[0]==cur else ""}" href="{u("cabinets","metodist","cyclogram",a[0],lang=lang)}">{NOM[a[0]][0 if lang=="ru" else 1]}</a>' for a in AGES) + "</div>"
     # хаб
     if lang == "ru":
         title = "Циклограмма в детском саду на 2026–2027 по приказу РК — все группы | ORDO"
