@@ -7,6 +7,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://aidabintazamat.github.io/ordo"
 PLUS = "21 900 ₸/мес"
+REG = "https://kz.ordo.education/#register-business"     # бесплатная регистрация сада (Free → 7 дней Plus)
+LOGIN = "https://kz.ordo.education/"
+from urllib.parse import quote
+def WA(topic): return "https://wa.me/77767233070?text=" + quote(f"Здравствуйте! Хочу демо ORDO: {topic}")
 
 CSS = """
 @font-face{font-family:Manrope;src:url(BASE/assets/Manrope-500.ttf);font-weight:500}
@@ -41,7 +45,11 @@ details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:
 .chips a{display:inline-block;margin:0 8px 8px 0;padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:14px}
 .chips a.on,.chips a:hover{border-color:var(--t);color:var(--t)}
 .note{font-size:13px;color:var(--mut);background:#FFF8E6;border:1px solid #F3E2B3;border-radius:12px;padding:10px 14px}
-footer{padding:30px 0 50px;color:var(--mut);font-size:14px}
+footer{padding:30px 0 90px;color:var(--mut);font-size:14px}
+.hero .acts{display:flex;gap:10px;flex-wrap:wrap}.lockrow{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.lockrow small{color:var(--mut)}.mbar{display:none}
+@media(max-width:820px){.mbar{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;padding:10px 12px;background:#fff;border-top:1px solid var(--line);z-index:9}.mbar .btn{flex:1;justify-content:center;padding:12px 10px}.hdr-try{display:none}}
+@media print{header,footer,.crumbs,.hero,.plus,details,section h2,.chips,.lock,.mbar,.noprint,.orbit{display:none!important}body{background:#fff}.day{border:0;box-shadow:none}}
 /* орбита */
 .orbit{position:relative;max-width:760px;aspect-ratio:1/1;margin:0 auto}
 .orbit svg{position:absolute;inset:0;width:100%;height:100%}
@@ -60,13 +68,13 @@ footer{padding:30px 0 50px;color:var(--mut);font-size:14px}
 
 T = {
  "ru": {"for_parents": "Родителям", "for_gardens": "Для детских садов", "login": "Войти", "home": "Главная",
-        "get_full": "Получить полностью — Plus", "trial": "7 дней бесплатно", "faq": "Частые вопросы",
+        "get_full": "Подключить Plus — 7 дней бесплатно", "trial": "7 дней бесплатно", "try": "Попробовать бесплатно", "demo": "💬 Демо в WhatsApp", "faq": "Частые вопросы",
         "other_cab": "Другие кабинеты", "materials": "Материалы кабинета", "open": "Открыто бесплатно",
-        "locked": "Открыть полностью — Plus", "proto": "Прототип структуры сайта для согласования. Тексты и материалы — демо."},
+        "locked": "Открыть — 7 дней бесплатно", "lock_hint": "Доступно в Plus", "proto": "Прототип структуры сайта для согласования. Тексты и материалы — демо."},
  "kk": {"for_parents": "Ата-аналарға", "for_gardens": "Балабақшаларға", "login": "Кіру", "home": "Басты бет",
-        "get_full": "Толық алу — Plus", "trial": "7 күн тегін", "faq": "Жиі қойылатын сұрақтар",
+        "get_full": "Plus қосу — 7 күн тегін", "trial": "7 күн тегін", "try": "Тегін байқап көру", "demo": "💬 WhatsApp-та демо", "faq": "Жиі қойылатын сұрақтар",
         "other_cab": "Басқа кабинеттер", "materials": "Кабинет материалдары", "open": "Тегін ашық",
-        "locked": "Толық ашу — Plus", "proto": "Сайт құрылымының прототипі. Мәтіндер — демо."},
+        "locked": "Ашу — 7 күн тегін", "lock_hint": "Plus-та қолжетімді", "proto": "Сайт құрылымының прототипі. Мәтіндер — демо."},
 }
 
 AGES = [("rannii", "группы раннего возраста (1–2 года)", "ерте жас тобы (1–2 жас)"),
@@ -154,7 +162,7 @@ def page(path, lang, title, desc, body, crumbs, alt=None, schema=None):
     sch = [bc] + (schema or [])
     crumbs_html = " › ".join(f'<a href="{h}">{html.escape(n)}</a>' for n, h in crumbs[:-1]) + (f" › {html.escape(crumbs[-1][0])}" if crumbs else "")
     lang_sw = ""
-    if alt:
+    if "kk-KZ" in alt:
         lang_sw = f'<span class="lang"><a class="{"on" if lang=="ru" else ""}" href="{alt.get("ru-KZ","#")}">RU</a><a class="{"on" if lang=="kk" else ""}" href="{alt.get("kk-KZ", alt.get("ru-KZ","#"))}">KK</a></span>'
     doc = f"""<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(title)}</title><meta name="description" content="{html.escape(desc)}">
@@ -164,10 +172,11 @@ def page(path, lang, title, desc, body, crumbs, alt=None, schema=None):
 <style>{CSS}</style></head><body>
 <header><div class="wrap nav"><a class="logo" href="{BASE}/"><img src="{BASE}/assets/ordo-o.png" alt="ORDO">ORDO</a>
 <nav><a href="{BASE}/">{t['for_parents']}</a><a class="on" href="{u('cabinets', lang=lang)}">{t['for_gardens']}</a></nav>
-{lang_sw}<a class="btn" href="#">{t['login']}</a></div></header>
+<span style="display:flex;gap:8px;align-items:center">{lang_sw}<a class="btn ghost" href="{LOGIN}">{t['login']}</a><a class="btn hdr-try" href="{REG}">{t['try']}</a></span></div></header>
 <div class="wrap"><div class="crumbs">{crumbs_html}</div></div>
 {body}
-<footer><div class="wrap"><p class="note">{t['proto']}</p>© ORDO · ordo.education</div></footer></body></html>"""
+<footer><div class="wrap"><p class="note">{t['proto']}</p>© ORDO · ordo.education</div></footer>
+<div class="mbar"><a class="btn" href="{REG}">{t['try']}</a><a class="btn ghost" href="{WA(title.split(' — ')[0].split(' | ')[0])}">💬 WhatsApp</a></div></body></html>"""
     out = ROOT / path / "index.html"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(doc, encoding="utf-8")
@@ -176,8 +185,8 @@ def page(path, lang, title, desc, body, crumbs, alt=None, schema=None):
 def plus_block(lang="ru", what="материалы"):
     t = T[lang]
     if lang == "kk":
-        return f'<section><div class="wrap"><div class="plus"><div><h2 style="margin:0">Садик Plus — {PLUS}</h2><p>Барлық материалдар толық, жүктеу және басып шығару. {t["trial"]}.</p></div><a class="btn" href="#">{t["get_full"]}</a></div></div></section>'
-    return f'<section><div class="wrap"><div class="plus"><div><h2 style="margin:0">Садик Plus — {PLUS}</h2><p>Все {what} полностью, скачивание и печать. {t["trial"]}.</p></div><a class="btn" href="#">{t["get_full"]}</a></div></div></section>'
+        return f'<section><div class="wrap"><div class="plus"><div><h2 style="margin:0">Садик Plus — {PLUS}</h2><p>Барлық материалдар толық, жүктеу және басып шығару. {t["trial"]}.</p></div><a class="btn" href="{REG}">{t["get_full"]}</a></div></div></section>'
+    return f'<section><div class="wrap"><div class="plus"><div><h2 style="margin:0">Садик Plus — {PLUS}</h2><p>Все {what} полностью, скачивание и печать. {t["trial"]}.</p></div><a class="btn" href="{REG}">{t["get_full"]}</a></div></div></section>'
 
 def faq_block(qas, lang="ru"):
     sch = {"@context": "https://schema.org", "@type": "FAQPage",
@@ -212,7 +221,7 @@ def cyclo_embed(lang):
     chips = '<div class="chips">' + "".join(
         f'<a class="{"on" if a[0]=="srednyaya" else ""}" href="{u("cabinets","metodist","cyclogram",a[0],lang=lang)}">{NOM[a[0]][0 if lang=="ru" else 1]}</a>' for a in AGES) + "</div>"
     week = f'<div class="day"><h3>{days[0]} <span class="badge">{t["open"]}</span></h3><ol>' + "".join(f"<li>{html.escape(x)}</li>" for x in mon) + "</ol></div>"
-    week += "".join(f'<div class="day lock"><h3>{d} <span>🔒</span></h3><a class="btn ghost" href="#">{t["locked"]}</a></div>' for d in days[1:])
+    week += "".join(f'<div class="day lock"><div class="lockrow"><h3 style="margin:0">🔒 {d}</h3><span><small>{t["lock_hint"]}</small> <a class="btn ghost" href="{REG}">{t["locked"]}</a></span></div></div>' for d in days[1:])
     if lang == "ru":
         h = "Циклограмма на 2026–2027 — выберите группу"; sub = "Пример: средняя группа (3–4 года). Понедельник открыт, остальные дни — в кабинете с Plus. Воспитатель видит только свою группу."
         more = "Все циклограммы по группам →"
@@ -238,7 +247,7 @@ for lang in ("ru", "kk"):
         lead = "Бүкіл ұжымға арналған 6 кабинет: әдістеме, HR, ас үй, медицина, қаржы және сату."
     cards = "".join(f'<a class="card" href="{u("cabinets", c[0], lang=lang)}"><div class="ic" style="background:{c[4]}">{c[3]}</div><h3>{c[1] if lang=="ru" else c[2]}</h3><p>{c[5] if lang=="ru" else CAB_KK_LEAD.get(c[0], c[5])}</p></a>' for c in CABS)
     body = f"""<div class="hero"><div class="wrap"><h1>{h1}</h1><p class="lead">{lead}</p>
-<a class="btn g" href="#">{T[lang]['trial']}</a></div></div>
+<div class="acts"><a class="btn g" href="{REG}">{T[lang]['try']} — {T[lang]['trial']}</a><a class="btn ghost" href="{WA('ORDO')}">{T[lang]['demo']}</a></div></div></div>
 <section style="padding-top:0"><div class="wrap">{orbit_html(lang)}</div></section>
 <section><div class="wrap"><h2>{'Кабинеты' if lang=='ru' else 'Кабинеттер'}</h2><div class="grid g3">{cards}</div></div></section>"""
     qas = [("Что такое программа для детского сада ORDO?", "Онлайн-система с 6 кабинетами: методический (методист и воспитатели), HR (заведующая, директор, администратор, помощник воспитателя), повар, медик, финансы и продажи."),
@@ -260,7 +269,7 @@ for c in CABS:
     fl = "".join(f'<div class="card"><h3>✓ {html.escape(f)}</h3></div>' for f in feats)
     ml = "".join(f'<a class="card" href="{u("cabinets", slug, m[0])}"><h3>{m[1]}</h3><p>{m[2]}</p></a>' for m in mats)
     body = f"""<div class="hero"><div class="wrap"><div class="ic" style="background:{col}">{emo}</div><h1>{name} <em>ORDO</em></h1><p class="lead">{lead}</p>
-<a class="btn g" href="#">{T['ru']['trial']}</a></div></div>
+<div class="acts"><a class="btn g" href="{REG}">{T['ru']['try']} — {T['ru']['trial']}</a><a class="btn ghost" href="{WA('ORDO')}">{T['ru']['demo']}</a></div></div></div>
 {cyclo_embed("ru") if slug == "metodist" else ""}
 <section><div class="wrap"><h2>Что делает кабинет</h2><div class="grid g3">{fl}</div></div></section>
 <section><div class="wrap"><h2>{T['ru']['materials']}</h2><div class="grid g3">{ml}</div></div></section>"""
@@ -278,8 +287,8 @@ for c in CABS:
         if kind == "age":
             continue  # циклограмма — ниже отдельно
         items = [f"{mtitle}: материал {i}" for i in range(1, 7)]
-        lst = f'<div class="day"><h3>{items[0]} <span class="badge">{T["ru"]["open"]}</span></h3><p>Демо-фрагмент открытого материала: текст виден на странице и доступен для поиска. Скачать / печать — для этого материала.</p></div>'
-        lst += "".join(f'<div class="day lock"><h3>{x} <span>🔒</span></h3><a class="btn ghost" href="#">{T["ru"]["locked"]}</a></div>' for x in items[1:])
+        lst = f'<div class="day"><h3>{items[0]} <span class="badge">{T["ru"]["open"]}</span></h3><p>Демо-фрагмент открытого материала: текст виден на странице и доступен для поиска.</p><p style="margin-top:10px"><button class="btn ghost noprint" onclick="window.print()">🖨 Распечатать / сохранить PDF</button></p></div>'
+        lst += "".join(f'<div class="day lock"><div class="lockrow"><h3 style="margin:0">🔒 {x}</h3><span><small>{T["ru"]["lock_hint"]}</small> <a class="btn ghost" href="{REG}">{T["ru"]["locked"]}</a></span></div></div>' for x in items[1:])
         body = f"""<div class="hero"><div class="wrap"><h1>{mtitle} <em>для детского сада</em></h1><p class="lead">{mdesc.capitalize()}. Готовые материалы ORDO по стандартам РК, на русском и казахском.</p></div></div>
 <section style="padding-top:0"><div class="wrap">{lst}</div></section>"""
         fb, fs = faq_block([(f"Где скачать {mtitle.lower()}?", "Один материал открыт бесплатно на этой странице, все остальные — в кабинете ORDO с Садик Plus."),
@@ -293,7 +302,7 @@ for c in CABS:
 c = CABS[0]
 ml = "".join(f'<a class="card" href="{u("cabinets", "metodist", m[0], lang="kk") if m[0]=="cyclogram" else u("cabinets","metodist",m[0])}"><h3>{m[1]}</h3><p>{m[2]}</p></a>' for m in c[7])
 body = f"""<div class="hero"><div class="wrap"><div class="ic" style="background:{c[4]}">{c[3]}</div><h1>{c[2]} <em>ORDO</em></h1><p class="lead">{CAB_KK_LEAD['metodist']}</p>
-<a class="btn g" href="#">{T['kk']['trial']}</a></div></div>
+<div class="acts"><a class="btn g" href="{REG}">{T['kk']['try']} — {T['kk']['trial']}</a><a class="btn ghost" href="{WA('ORDO')}">{T['kk']['demo']}</a></div></div></div>
 {cyclo_embed("kk")}
 <section><div class="wrap"><h2>{T['kk']['materials']}</h2><div class="grid g3">{ml}</div></div></section>""" + plus_block("kk") + other_cabs("metodist", "kk")
 pages.append(page("kz/kk/cabinets/metodist", "kk", "Балабақшаның әдістемелік кабинеті онлайн — ORDO", CAB_KK_LEAD["metodist"], body,
@@ -306,8 +315,8 @@ def cyclo_week(lang):
     mon = MON_RU if lang == "ru" else MON_KK
     t = T[lang]
     h = f'<div class="day"><h3>{days[0]} <span class="badge">{t["open"]}</span></h3><ol>' + "".join(f"<li>{html.escape(x)}</li>" for x in mon) + \
-        f'</ol><p style="margin-top:10px"><a class="btn ghost" href="#">⬇ {"Скачать понедельник (PDF)" if lang=="ru" else "Дүйсенбіні жүктеу (PDF)"}</a></p></div>'
-    h += "".join(f'<div class="day lock"><h3>{d} <span>🔒</span></h3><a class="btn ghost" href="#">{t["locked"]}</a></div>' for d in days[1:])
+        f'</ol><p style="margin-top:10px"><button class="btn ghost noprint" onclick="window.print()">🖨 {"Распечатать / сохранить PDF" if lang=="ru" else "Басып шығару / PDF"}</button></p></div>'
+    h += "".join(f'<div class="day lock"><div class="lockrow"><h3 style="margin:0">🔒 {d}</h3><span><small>{t["lock_hint"]}</small> <a class="btn ghost" href="{REG}">{t["locked"]}</a></span></div></div>' for d in days[1:])
     return h
 
 for lang in ("ru", "kk"):
@@ -358,7 +367,7 @@ for lang in ("ru", "kk"):
         body = f"""<div class="hero"><div class="wrap"><h1>{h1}</h1><p class="lead">{lead}</p>{chips_all(a[0])}</div></div>
 <section style="padding-top:0"><div class="wrap">{cyclo_week(lang)}</div></section>""" + plus_block(lang, "дни недели и вся программа года") + fb
         alt = {"ru-KZ": u("cabinets", "metodist", "cyclogram", a[0]), "kk-KZ": u("cabinets", "metodist", "cyclogram", a[0], lang="kk")}
-        pages.append(page(f"{base_path}/{a[0]}", lang, title, desc, body, crumbs + [(g.split(" (")[0], alt["ru-KZ" if lang=="ru" else "kk-KZ"])], alt, [fs]))
+        pages.append(page(f"{base_path}/{a[0]}", lang, title, desc, body, crumbs + [(NOM[a[0]][0 if lang=="ru" else 1], alt["ru-KZ" if lang=="ru" else "kk-KZ"])], alt, [fs]))
 
 # ---------- sitemap (дополняем)
 sm = ROOT / "sitemap.xml"
