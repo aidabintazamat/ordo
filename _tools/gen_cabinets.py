@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Прототип SEO-структуры «Для детских садов»: 6 подсайтов кабинетов + страницы материалов.
 По ТЗ docs/tz/TZ_cabinet_subpages_seo_2026-11-22.md (ordo-ads). Запуск: python3 _tools/gen_cabinets.py"""
-import json, html, os
+import json, html, os, re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,7 +42,7 @@ a.card:hover{border-color:var(--t)}.card p{margin:0;color:var(--mut);font-size:1
 .day.lock h3 span{font-size:20px}.badge{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--gl);color:var(--g2)}
 .plus{background:linear-gradient(135deg,var(--t),#0B7F86);color:#fff;border-radius:22px;padding:28px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
 .plus p{color:#D8F1F1;margin:4px 0 0}.plus .btn{background:#fff;color:var(--t)}
-details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}summary{font-weight:700;cursor:pointer}details ol{margin:8px 0 0;padding-left:20px}details li{margin:4px 0}.gimg{display:block;width:100%;max-width:760px;margin:8px 0 12px;border:1px solid var(--line);border-radius:10px}
+details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}summary{font-weight:700;cursor:pointer}details ol{margin:8px 0 0;padding-left:20px}details li{margin:4px 0}.gq .gans{color:var(--mut);margin:10px 0 16px}.gsteps{list-style:none;margin:0;padding:0;counter-reset:s}.gstep{position:relative;padding-left:46px;margin:0 0 22px}.gstep::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:-3px;width:32px;height:32px;border-radius:50%;background:#8BC34A;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}.gstep p{margin:2px 0 10px;font-size:16px;line-height:1.5}.gstep b{font-weight:700}.gimg{display:block;width:100%;max-width:760px;margin:4px 0 0;border:1px solid var(--line);border-radius:14px;box-shadow:0 6px 20px rgba(16,24,40,.08)}@media(max-width:600px){.gstep{padding-left:40px}.gstep::before{width:28px;height:28px;font-size:14px}}
 .chips a{display:inline-block;margin:0 8px 8px 0;padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:14px}
 .chips a.on,.chips a:hover{border-color:var(--t);color:var(--t)}
 .note{font-size:13px;color:var(--mut);background:#FFF8E6;border:1px solid #F3E2B3;border-radius:12px;padding:10px 14px}
@@ -212,15 +212,17 @@ def guide_faq(key):
     items = [g for g in GUIDE if g["cat"] in GUIDE_CAT.get(key, ())]
     if not items: return "", None
     sch = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": g["q"], "acceptedAnswer": {"@type": "Answer",
-           "text": g["a"] + " " + " ".join(f"{i}. {st}" for i, st in enumerate(g["steps"], 1))}} for g in items]}
+           "text": g["a"].replace("**", "") + " " + " ".join(f"{i}. {st.replace(chr(42)*2, chr(0)).replace(chr(0), str())}" for i, st in enumerate(g["steps"], 1))}} for g in items]}
+    def md(t): return re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", html.escape(t))
+    def plain(t): return t.replace("**", "")
     def steps_html(g):
         out, prev = [], None
         for st, im in zip(g["steps"], g.get("imgs") or [""] * len(g["steps"])):
-            pic = f'<img class="gimg" loading="lazy" src="{BASE}/guide-img/{im}" alt="{html.escape(g["q"])}">' if im and im != prev else ""
+            pic = f'<img class="gimg" loading="lazy" src="{BASE}/guide-img/{im}" alt="{html.escape(plain(st))}">' if im and im != prev else ""
             prev = im or prev
-            out.append(f"<li>{html.escape(st)}{pic}</li>")
+            out.append(f'<li class="gstep"><p>{md(st)}</p>{pic}</li>')
         return "".join(out)
-    h = "".join(f'<details><summary>{html.escape(g["q"])}</summary><p>{html.escape(g["a"])}</p><ol>' + steps_html(g) + "</ol></details>" for g in items)
+    h = "".join(f'<details class="gq"><summary>{html.escape(g["q"])}</summary><p class="gans">{md(g["a"])}</p><ol class="gsteps">' + steps_html(g) + "</ol></details>" for g in items)
     return f'<section><div class="wrap"><h2>Как работать в ORDO: пошагово</h2>{h}</div></section>', sch
 
 def faq_block(qas, lang="ru"):
