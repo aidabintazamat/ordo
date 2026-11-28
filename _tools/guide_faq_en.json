@@ -1,0 +1,447 @@
+[
+ {
+  "id": "login-dashboard",
+  "cat": "start",
+  "q": "How do I sign in to ORDO, and what does the dashboard show?",
+  "a": "Open kz.ordo.education and click \"Sign in\". After you sign in, the dashboard opens: the home page with figures for the whole kindergarten.",
+  "steps": [
+   "Open kz.ordo.education and click \"Sign in\" in the top right corner.",
+   "Enter the login and password sent to your email, and sign in to your account.",
+   "To return to the home page, click \"Dashboard\" in the left menu.",
+   "Choose the start and end dates of the period and click \"Search\".",
+   "Review the cards: kindergarten structure, finances, children's progress, Methodology Cabinet and Sales Cabinet. Each card has a \"More\" button."
+  ]
+ },
+ {
+  "id": "top-panel",
+  "cat": "start",
+  "q": "How do I change the language or organization, or turn on dark mode?",
+  "a": "Do all of this in the top panel on the right: language, organization, theme and profile menu.",
+  "steps": [
+   "Click \"RU\" and choose the interface language: Russian or Kazakh.",
+   "Click the organization name to switch to another kindergarten or another role.",
+   "Click the moon icon to turn on dark mode.",
+   "Click your name to change your password or sign out."
+  ]
+ },
+ {
+  "id": "subscription",
+  "cat": "start",
+  "q": "How do I view my subscription and pay the service fee?",
+  "a": "Open \"Subscription\" in the left menu. It shows how much is paid, how much is due and the monthly payment schedule.",
+  "steps": [
+   "In the left menu, click \"Subscription\".",
+   "At the top, review the totals for the school year: paid, due, annual fee and the next payment date.",
+   "Switch between the \"All\", \"Paid\" and \"Unpaid\" tabs to find the month you need.",
+   "To pay for a month, click \"Pay\" in its row."
+  ]
+ },
+ {
+  "id": "ai-assistant",
+  "cat": "start",
+  "q": "How do I ask the AI assistant a question?",
+  "a": "Open \"AI assistant\" and type your question in plain words, or click a ready-made prompt.",
+  "steps": [
+   "In the left menu, click \"AI assistant\".",
+   "Click a ready-made prompt, for example \"How many children are checked in at the kindergarten today?\".",
+   "Or type your own question in the field at the bottom.",
+   "Click the microphone to ask by voice, or the arrow to send text.",
+   "To start the conversation over, click \"New chat\"."
+  ]
+ },
+ {
+  "id": "organizations",
+  "cat": "start",
+  "q": "Where can I see my organization's details?",
+  "a": "Open \"My organizations\". It shows the city, district, number of children and subscription of each of your kindergartens.",
+  "steps": [
+   "In the left menu, click \"My organizations\".",
+   "To change a kindergarten's details, click \"Actions\" in its row.",
+   "If you have several kindergartens, add a new one with the \"Add organization\" button."
+  ]
+ },
+ {
+  "id": "tasks",
+  "cat": "start",
+  "q": "How do I work with tasks?",
+  "a": "Open \"Tasks\". Tasks are sorted into columns: new, this month, this week, today and completed.",
+  "steps": [
+   "In the left menu, click \"Tasks\".",
+   "Choose a tab: \"All tasks\", \"My tasks\" or \"Assigned to me\".",
+   "Click a task card to open its details.",
+   "To assign a task to a staff member, click \"New task\"."
+  ]
+ },
+ {
+  "id": "documents",
+  "cat": "start",
+  "q": "Where do I store and find kindergarten documents?",
+  "a": "All files are in the \"Documents\" section. You can filter them by category and search by name.",
+  "steps": [
+   "In the left menu, click \"Documents\".",
+   "Choose a category: \"Finance\", \"Children\", \"Parents\", \"HR documents\" and others.",
+   "Enter the document name in the search field.",
+   "Click \"View\" to open or download the file.",
+   "To upload a new file, click \"Add\"."
+  ]
+ },
+ {
+  "id": "add-group",
+  "cat": "kontingent",
+  "q": "How do I create a group?",
+  "a": "Open \"Enrollment → Groups\" and click \"Add group\". Enter the name, capacity, age and teachers.",
+  "steps": [
+   "In the left menu, open \"Enrollment → Groups\".",
+   "Click \"Add group\".",
+   "Enter the group name, for example \"Sunshine\".",
+   "Enter the capacity and age category, then choose the teachers.",
+   "Click \"Save\"."
+  ]
+ },
+ {
+  "id": "add-child",
+  "cat": "kontingent",
+  "q": "How do I add a child to a group?",
+  "a": "Open \"Enrollment → Children\", click \"Add child\", fill in the details, and choose the group and parent.",
+  "steps": [
+   "In the left menu, open \"Enrollment → Children\".",
+   "Click the blue \"Add child\" button.",
+   "Fill in the child's last name, first name and date of birth.",
+   "Choose the group in the \"Group\" field.",
+   "Open the \"Parents\" tab and choose a parent from the list, or click \"New parent\".",
+   "Click \"Save\"."
+  ]
+ },
+ {
+  "id": "add-parent",
+  "cat": "kontingent",
+  "q": "How do I add a parent?",
+  "a": "Open \"Enrollment → Parents\" and click \"Add user\". The role is \"Parent\".",
+  "steps": [
+   "In the left menu, open \"Enrollment → Parents\".",
+   "Check whether the parent is already in the list: enter their name or phone number in the search field.",
+   "If the parent is not there, click \"Add user\".",
+   "Fill in the full name and phone number or email.",
+   "In the \"Roles and organizations\" block, keep the \"Parent\" role and click \"Create\"."
+  ]
+ },
+ {
+  "id": "attendance",
+  "cat": "kontingent",
+  "q": "How do I mark children's attendance?",
+  "a": "Open \"Enrollment → Check-in\", choose the date and group, mark \"Present\" or \"Absent\", and save.",
+  "steps": [
+   "In the left menu, open \"Enrollment → Check-in\".",
+   "Check the date and choose the group.",
+   "For each child, click \"Present\" or \"Absent\".",
+   "If needed, enter the temperature and a comment.",
+   "Scroll down and click \"Save check-ins\"."
+  ]
+ },
+ {
+  "id": "timesheet",
+  "cat": "kontingent",
+  "q": "How do I view and print the attendance sheet?",
+  "a": "Open \"Enrollment → Attendance sheet\", choose the group and month, click \"Search\", then \"Print\".",
+  "steps": [
+   "In the left menu, open \"Enrollment → Attendance sheet\".",
+   "Choose the group and month.",
+   "Click \"Search\".",
+   "Click \"Print\" to get the sheet on paper or as a PDF."
+  ]
+ },
+ {
+  "id": "birthdays",
+  "cat": "kontingent",
+  "q": "How do I see children's birthdays?",
+  "a": "Open \"Enrollment → Children's birthdays\". Birthdays are grouped by month.",
+  "steps": [
+   "In the left menu, open \"Enrollment → Children's birthdays\".",
+   "Click a month to see only that month's birthdays.",
+   "Switch the view between \"By month\" and \"List\"."
+  ]
+ },
+ {
+  "id": "website",
+  "cat": "sales",
+  "q": "How do I set up the kindergarten website?",
+  "a": "Open \"Sales Cabinet → Website\", set the website address and save. The website is available to parents right away.",
+  "steps": [
+   "In the left menu, open \"Sales Cabinet → Website\".",
+   "Choose a short address in Latin letters and enter it in the \"Link\" field.",
+   "Click \"Save\". \"Website is available\" appears under the field.",
+   "Click \"Copy\" to send the link to parents, or \"Open website\".",
+   "Click \"Edit website\" to change photos, and \"Add page\" for the public offer or privacy policy.",
+   "Upload photos of the kindergarten to the website. The \"Sign up\" button sends a parent's request straight to ORDO."
+  ]
+ },
+ {
+  "id": "parent-requests",
+  "cat": "sales",
+  "q": "How do I work with requests from parents?",
+  "a": "Open \"Sales Cabinet → Requests from parents\". Requests move through stages: new, qualification, tour, trial day, enrollment.",
+  "steps": [
+   "In the left menu, open \"Sales Cabinet → Requests from parents\".",
+   "At the top, review the totals: all requests, new, in progress, enrolled and declined.",
+   "Click a request card to open it and move it to the next stage.",
+   "Add a request that came by phone manually with the \"Add request\" button."
+  ]
+ },
+ {
+  "id": "clubs",
+  "cat": "sales",
+  "q": "How do I add a club?",
+  "a": "Open \"Sales Cabinet → Clubs\", click \"Add club\", and enter the name, price and days of the week.",
+  "steps": [
+   "In the left menu, open \"Sales Cabinet → Clubs\".",
+   "Click \"Add club\". The pencil in a row opens editing.",
+   "Enter the club name and monthly price.",
+   "Select the days of the week and click \"Save\"."
+  ]
+ },
+ {
+  "id": "subscription-types",
+  "cat": "sales",
+  "q": "How do I set up membership types?",
+  "a": "A membership type is a kindergarten plan: name, price and period. Create the types once, then assign them to children.",
+  "steps": [
+   "In the left menu, open \"Sales Cabinet → Membership types\".",
+   "Click \"Add\" and enter the name, price and period.",
+   "Check the list of plans. The pencil on the right edits a plan."
+  ]
+ },
+ {
+  "id": "subscriptions",
+  "cat": "sales",
+  "q": "How do I view children's memberships?",
+  "a": "Open \"Sales Cabinet → Memberships\". It shows the plan, discount and amount due for each child.",
+  "steps": [
+   "In the left menu, open \"Sales Cabinet → Memberships\".",
+   "Choose a group or enter the child's IIN or full name.",
+   "Click \"Search\".",
+   "Click the icon on the right to open the child's membership."
+  ]
+ },
+ {
+  "id": "discounts",
+  "cat": "sales",
+  "q": "How do I add a discount?",
+  "a": "Open \"Sales Cabinet → Discounts\" and click \"Add\". You can then apply the discount to a child's membership.",
+  "steps": [
+   "In the left menu, open \"Sales Cabinet → Discounts\".",
+   "Click \"Add\", enter the discount name and amount, and save."
+  ]
+ },
+ {
+  "id": "parent-payments",
+  "cat": "sales",
+  "q": "How do I view parents' payments?",
+  "a": "Open \"Sales Cabinet → Kindergarten payments report\". Green cells mean paid, pink cells mean no payment.",
+  "steps": [
+   "In the left menu, open \"Sales Cabinet → Kindergarten payments report\".",
+   "Find a child by full name or choose a group.",
+   "At the top, review the totals: collected for the year, debt and collection rate.",
+   "In the table, the amount in a cell is the payment for that month. The legend explains the colors.",
+   "Click \"Export to Excel\" to download the report."
+  ]
+ },
+ {
+  "id": "add-staff",
+  "cat": "hr",
+  "q": "How do I add a staff member?",
+  "a": "Open \"HR Cabinet → All users\", click \"Add user\" and choose the role: teacher, methodologist, cook and so on.",
+  "steps": [
+   "In the left menu, open \"HR Cabinet → All users\".",
+   "To see only one position, choose it in the menu.",
+   "Click \"Add user\".",
+   "Fill in the full name and phone number or email.",
+   "Choose the staff member's role and organization, and click \"Create\"."
+  ]
+ },
+ {
+  "id": "staff-attendance",
+  "cat": "hr",
+  "q": "How do I mark staff arrival?",
+  "a": "Open \"HR Cabinet → Staff check-in\", mark \"Present\" or \"Absent\", and save.",
+  "steps": [
+   "In the left menu, open \"HR Cabinet → Staff check-in\".",
+   "Check the date.",
+   "For each staff member, click \"Present\" or \"Absent\".",
+   "Scroll down and click \"Save check-ins\"."
+  ]
+ },
+ {
+  "id": "cyclogram",
+  "cat": "metod",
+  "q": "How do I open and fill in the cyclogram (weekly activity plan)?",
+  "a": "Open \"Methodology Cabinet → Cyclogram\", and choose the week and group. You can use the ready-made Ordo cyclogram as is or build your own.",
+  "steps": [
+   "In the left menu, open \"Methodology Cabinet → Cyclogram\".",
+   "Choose the school year, week and age group.",
+   "The \"Ordo cyclogram\" tab is the ready-made plan. The \"My cyclogram\" tab is your plan.",
+   "The \"Use Ordo cyclogram\" checkbox turns on the ready-made plan for the group. \"Print\" prints it.",
+   "In the \"My cyclogram\" tab, click \"Add lesson\" on the day you need.",
+   "Choose the educational area, activity and lesson, then click \"Save\"."
+  ]
+ },
+ {
+  "id": "syllabus",
+  "cat": "metod",
+  "q": "How do I create a curriculum?",
+  "a": "Open \"Methodology Cabinet → Curriculum\". You can generate the plan automatically for all groups or add it manually.",
+  "steps": [
+   "In the left menu, open \"Methodology Cabinet → Curriculum\".",
+   "Choose the group and school year in the filters.",
+   "Click \"Generate for all groups\" to have ORDO create the plan for you.",
+   "Or click \"Add plan\" and fill it in manually.",
+   "The eye icon in a row opens the plan for viewing."
+  ]
+ },
+ {
+  "id": "perspective-plan",
+  "cat": "metod",
+  "q": "How do I generate a long-term plan?",
+  "a": "Open \"Methodology Cabinet → Long-term plan\" and click \"Generate for all groups\" or \"Add plan\".",
+  "steps": [
+   "In the left menu, open \"Methodology Cabinet → Long-term plan\".",
+   "Click \"Generate for all groups\". A plan appears for each group.",
+   "To create a plan manually, click \"Add plan\".",
+   "The pencil in a row opens the plan for editing."
+  ]
+ },
+ {
+  "id": "monitoring",
+  "cat": "metod",
+  "q": "How do I run a children's skills assessment?",
+  "a": "Open \"Methodology Cabinet → Monitoring\" and click \"Run\". Results are shown as percentages for each skill.",
+  "steps": [
+   "In the left menu, open \"Methodology Cabinet → Monitoring\".",
+   "Click \"Run\" to start a new assessment.",
+   "To find results, choose the group and type of monitoring.",
+   "Click \"Fill in\" to enter scores for a child.",
+   "Click \"Group summary\" to see the totals for the whole group."
+  ]
+ },
+ {
+  "id": "lessons",
+  "cat": "metod",
+  "q": "How do I find a lesson (organized activity) or add my own?",
+  "a": "Open \"Methodology Cabinet → Organized activities list\". Ready-made lessons are in the \"Ordo lessons\" tab, yours are in \"My lessons\".",
+  "steps": [
+   "In the left menu, open \"Methodology Cabinet → Organized activities list\".",
+   "Choose the \"Ordo lessons\" or \"My lessons\" tab.",
+   "Narrow the list with filters: area, subject, type of organized activity, age.",
+   "To create your own lesson, click \"Add lesson\"."
+  ]
+ },
+ {
+  "id": "meal-menu",
+  "cat": "food",
+  "q": "How do I create a meal menu?",
+  "a": "Open \"Cook's Cabinet → Meal menu\". You can use the ready-made Ordo menu or build your own from the dish catalog.",
+  "steps": [
+   "In the left menu, open \"Cook's Cabinet → Meal menu\".",
+   "Choose the week.",
+   "The \"Ordo meal menu\" tab is the ready-made menu. \"Download\" gives you the menu as a file.",
+   "To build your own menu, open \"My meal menu\" and click \"Add dish\" in the cell you need.",
+   "Find the dish in the search and click the plus next to it."
+  ]
+ },
+ {
+  "id": "dishes",
+  "cat": "food",
+  "q": "Where do I find the dish catalog?",
+  "a": "Open \"Cook's Cabinet → Dishes\". It has 270+ dishes with recipe numbers and meal schedule.",
+  "steps": [
+   "In the left menu, open \"Cook's Cabinet → Dishes\".",
+   "Choose the \"Ordo dishes\" or \"Our dishes\" tab.",
+   "Enter the dish name in the search field.",
+   "Click \"Open\" to see the recipe."
+  ]
+ },
+ {
+  "id": "brakerage",
+  "cat": "food",
+  "q": "How do I keep the raw food quality log?",
+  "a": "Open \"Medical Cabinet → Raw food quality check\". Record each product delivery in a separate row.",
+  "steps": [
+   "In the left menu, open \"Medical Cabinet → Raw food quality check\".",
+   "Choose the month.",
+   "Click \"Add record\" and fill in the product, quantity and rating.",
+   "For an inspection, click \"Excel\" or \"Print / PDF\"."
+  ]
+ },
+ {
+  "id": "morning-filter",
+  "cat": "med",
+  "q": "How do I carry out the morning health check?",
+  "a": "Open \"Medical Cabinet → Morning health check\". Every morning, mark whether each child is admitted and confirm.",
+  "steps": [
+   "In the left menu, open \"Medical Cabinet → Morning health check\".",
+   "Check the date and choose the group.",
+   "For each child, choose: \"Admitted\", \"Admitted with restrictions\", \"Not admitted\" or \"Not at kindergarten\".",
+   "Click \"Confirm check-ins\"."
+  ]
+ },
+ {
+  "id": "vaccinations",
+  "cat": "med",
+  "q": "How do I keep the vaccination log?",
+  "a": "Open \"Medical Cabinet → Vaccinations\". It shows how many vaccinations are done according to the schedule and which are overdue.",
+  "steps": [
+   "In the left menu, open \"Medical Cabinet → Vaccinations\".",
+   "Find a child by full name or IIN.",
+   "Click the arrow in the row to open the child's vaccination record.",
+   "Click \"Add vaccination\" to enter a new record.",
+   "Click \"Download 066/u\" to get the form for the clinic."
+  ]
+ },
+ {
+  "id": "allergies",
+  "cat": "med",
+  "q": "How do I record a child's allergy?",
+  "a": "Open \"Medical Cabinet → Allergies\" and click \"Add allergy\". Enter the allergen, type and measures at the kindergarten.",
+  "steps": [
+   "In the left menu, open \"Medical Cabinet → Allergies\".",
+   "Click \"Add allergy\" and choose the child and allergen.",
+   "To find records, use the search and the group and allergen filters.",
+   "The top shows how many allergies of each type there are."
+  ]
+ },
+ {
+  "id": "finance-dds",
+  "cat": "finance",
+  "q": "How do I track the kindergarten's income and expenses (cash flow)?",
+  "a": "Open \"Finance Cabinet → Cash flow\". Add income and expenses, and ORDO calculates the total for the period.",
+  "steps": [
+   "In the left menu, open \"Finance Cabinet → Cash flow\".",
+   "Choose the type, category and dates in the filter.",
+   "Click \"Add income\" or \"Add expense\".",
+   "In the \"Summary\" card, review the income, expenses and total for the period."
+  ]
+ },
+ {
+  "id": "payments",
+  "cat": "finance",
+  "q": "How do I find a parent's payment?",
+  "a": "Open \"Finance Cabinet → Payments\". Find a payment by group, IIN, child's full name or payment method.",
+  "steps": [
+   "In the left menu, open \"Finance Cabinet → Payments\".",
+   "Choose a group or enter the child's IIN or full name.",
+   "If needed, choose the payment method.",
+   "Click the filter button."
+  ]
+ },
+ {
+  "id": "courses",
+  "cat": "courses",
+  "q": "How do I take a course and get a certificate?",
+  "a": "Open \"Training → Courses\", choose a course and click \"Continue\". Certificates are in the \"My certificates\" tab.",
+  "steps": [
+   "In the left menu, open \"Training → Courses\".",
+   "Choose the type of course: corporate, parenting or business.",
+   "Click \"Continue\" on the course card.",
+   "Find your earned certificates in the \"My certificates\" tab."
+  ]
+ }
+]
