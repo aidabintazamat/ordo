@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Прототип SEO-структуры «Для детских садов»: 6 подсайтов кабинетов + страницы материалов.
 По ТЗ docs/tz/TZ_cabinet_subpages_seo_2026-11-22.md (ordo-ads). Запуск: python3 _tools/gen_cabinets.py"""
-import json, html
+import json, html, os
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,7 +42,7 @@ a.card:hover{border-color:var(--t)}.card p{margin:0;color:var(--mut);font-size:1
 .day.lock h3 span{font-size:20px}.badge{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--gl);color:var(--g2)}
 .plus{background:linear-gradient(135deg,var(--t),#0B7F86);color:#fff;border-radius:22px;padding:28px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
 .plus p{color:#D8F1F1;margin:4px 0 0}.plus .btn{background:#fff;color:var(--t)}
-details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}summary{font-weight:700;cursor:pointer}
+details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin-bottom:10px}summary{font-weight:700;cursor:pointer}details ol{margin:8px 0 0;padding-left:20px}details li{margin:4px 0}
 .chips a{display:inline-block;margin:0 8px 8px 0;padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:14px}
 .chips a.on,.chips a:hover{border-color:var(--t);color:var(--t)}
 .note{font-size:13px;color:var(--mut);background:#FFF8E6;border:1px solid #F3E2B3;border-radius:12px;padding:10px 14px}
@@ -204,6 +204,18 @@ def plus_block(lang="ru", what="материалы"):
         return f'<section><div class="wrap"><div class="plus"><div><h2 style="margin:0">Садик Plus — {PLUS}</h2><p>Барлық материалдар толық, жүктеу және басып шығару. {t["trial"]}.</p><p class="pay">💳 {PAY["kk"]}</p></div><a class="btn" href="{REG}">{t["get_full"]}</a></div></div></section>'
     return f'<section><div class="wrap"><div class="plus"><div><h2 style="margin:0">Садик Plus — {PLUS}</h2><p>Все {what} полностью, скачивание и печать. {t["trial"]}.</p><p class="pay">💳 {PAY["ru"]}</p></div><a class="btn" href="{REG}">{t["get_full"]}</a></div></div></section>'
 
+# ORDO Гид → FAQ (Аида TG 11390, 28.11): статьи гида как вопросы на страницах кабинетов
+GUIDE = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "guide_faq.json"), encoding="utf-8"))
+GUIDE_CAT = {"cabinets": ("start", "kontingent", "courses"), "prodazhi": ("sales",), "hr": ("hr",), "metodist": ("metod",),
+             "povar": ("food",), "medik": ("med",), "finansy": ("finance",)}
+def guide_faq(key):
+    items = [g for g in GUIDE if g["cat"] in GUIDE_CAT.get(key, ())]
+    if not items: return "", None
+    sch = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": g["q"], "acceptedAnswer": {"@type": "Answer",
+           "text": g["a"] + " " + " ".join(f"{i}. {st}" for i, st in enumerate(g["steps"], 1))}} for g in items]}
+    h = "".join(f'<details><summary>{html.escape(g["q"])}</summary><p>{html.escape(g["a"])}</p><ol>' + "".join(f"<li>{html.escape(st)}</li>" for st in g["steps"]) + "</ol></details>" for g in items)
+    return f'<section><div class="wrap"><h2>Как работать в ORDO: пошагово</h2>{h}</div></section>', sch
+
 def faq_block(qas, lang="ru"):
     sch = {"@context": "https://schema.org", "@type": "FAQPage",
            "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in qas]}
@@ -272,11 +284,12 @@ for lang in ("ru", "kk"):
           [("ORDO бағдарламасы деген не?", "6 кабинеті бар онлайн-жүйе: әдістемелік, HR, аспаз, медбике, қаржы және сату."),
            ("Бағасы қанша?", f"Садик Plus — {PLUS}. Алғашқы 7 күн тегін.")]
     fb, fs = faq_block(qas, lang)
-    body += plus_block(lang, "кабинеты") + fb
+    gh, gs = guide_faq("cabinets") if lang == "ru" else ("", None)
+    body += plus_block(lang, "кабинеты") + fb + gh
     path = "kz/kk/cabinets" if lang == "kk" else "kz/cabinets"
     crumbs = [(T[lang]["home"], BASE + "/"), (T[lang]["for_gardens"], u("cabinets", lang=lang))]
     pages.append(page(path, lang, title, desc, body, crumbs, alt,
-                      [fs, {"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "ORDO", "applicationCategory": "BusinessApplication", "operatingSystem": "Web",
+                      [fs] + ([gs] if gs else []) + [{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "ORDO", "applicationCategory": "BusinessApplication", "operatingSystem": "Web",
                             "offers": {"@type": "Offer", "price": "21900", "priceCurrency": "KZT"}}]))
 
 # ---------- подсайты кабинетов
@@ -290,11 +303,12 @@ for c in CABS:
 <section><div class="wrap"><h2>Что делает кабинет</h2><div class="grid g3">{fl}</div></div></section>
 <section><div class="wrap"><h2>{T['ru']['materials']}</h2><div class="grid g3">{ml}</div></div></section>"""
     fb, fs = faq_block([(f"Для кого {name.lower()}?", lead), ("Сколько стоит?", "Бесплатно: кабинет продаж и карточка в реестре ORDO не требуют Plus.") if slug in FREE else ("Можно попробовать бесплатно?", "Да, 7 дней бесплатно; часть материалов открыта без регистрации.")])
-    body += (free_block() if slug in FREE else plus_block()) + fb + other_cabs(slug)
+    gh, gs = guide_faq(slug)
+    body += (free_block() if slug in FREE else plus_block()) + fb + gh + other_cabs(slug)
     alt = {"ru-KZ": u("cabinets", slug)}
     if slug == "metodist": alt["kk-KZ"] = u("cabinets", slug, lang="kk")
     crumbs = [(T["ru"]["home"], BASE + "/"), (T["ru"]["for_gardens"], u("cabinets")), (name, u("cabinets", slug))]
-    pages.append(page(f"kz/cabinets/{slug}", "ru", f"{name} детского сада онлайн — ORDO", f"{name} ORDO: {lead}"[:300], body, crumbs, alt, [fs]))
+    pages.append(page(f"kz/cabinets/{slug}", "ru", f"{name} детского сада онлайн — ORDO", f"{name} ORDO: {lead}"[:300], body, crumbs, alt, [fs] + ([gs] if gs else [])))
 
     # страницы материалов
     for m in mats:
